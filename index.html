@@ -1,0 +1,571 @@
+<!doctype html>
+<html>
+<head>
+  <title>Introducing Responsive Images</title>
+  <link rel="stylesheet" href="css/reveal.css" />
+  <link rel="stylesheet" href="css/theme/night.css" />
+  <link rel="stylesheet" href="css/rainbow.css" />
+  <style>
+  .reveal .speaker-notes { max-height: 50%; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- Intro Slide -->
+      <section>
+        <h1>Introducing Responsive Images</h1>
+        <img style="background: transparent none; border: none; box-shadow: none; width: 150px" src="images/unicorn.png" />
+      </section>
+      <section>
+        <h2>Contents of the Talk</h2>
+        <ul>
+          <li>Why use responsive images?</li>
+          <li>How do you use responsive images?</li>
+          <li>Browser Support</li>
+          <li>Can clients actually do this?</li>
+          <li>What does this all mean for WA?</li>
+        </ul>
+      </section>
+      <!-- CSS Overview -->
+      <section>
+        <section>
+          <h2>What are responsive images and why should we use them?</h2>
+          <p>Don't we already have responsive images?</p>
+        </section>
+        <section>
+          <h3>Current Method</h3>
+          <p>Resizing only.</p>
+          <img src="images/Korean-BBQ-Ann-Arbor.jpg" alt="" style="width: 300px" />
+          <div class="fragment">
+            <img src="images/Korean-BBQ-Ann-Arbor.jpg" alt="" />
+          </div>
+        </section>
+        <section>
+          <h3>Current Method</h3>
+          <p>Using two different sized images, hidden w/ css media queries</p>
+<pre><code data-trim>
+// for mobile, hides large image and shows small image
+.small { display: block; }
+.large { display: none; }
+
+// for desktop, hides small image and shows large image
+@media (min-width: 992px) {
+  .small { display: none; }
+  .large { display: block; }
+}
+</code></pre>
+          <img class="fragment" src="images/network.jpg" />
+        </section>
+        <section>
+          <h2>Clarity</h2>
+          <p>Serve different images to different devices</p>
+          <img src="images/Korean-BBQ-Ann-Arbor.jpg" alt="" style="width: 300px" />
+          <p>vs</p>
+          <img src="images/c700x420.jpg" style="width: 300px" />
+        </section>
+        <section>
+          <h2>Retina</h2>
+          <img src="images/logo-blurry.jpg" />
+          <img src="images/logo-retina.jpg" />
+        </section>
+      </section>
+      <!-- how do you use responsive images? -->
+      <section>
+        <section>
+          <h2>3 things combined make up responsive image techniques</h2>
+          <ul>
+            <li class="fragment">
+              <span style="font-family: monospace">&lt;picture&gt;</span> element
+            </li>
+            <li class="fragment"><span style="font-family: monospace">srcset=""</span> attribute</li>
+            <li class="fragment"><span style="font-family: monospace">sizes=""</span> attribute</li>
+          </ul>
+        </section>
+        <section>
+          <h2><span style="font-family: monospace">&lt;picture&gt;</span> support</h2>
+          <p class="ciu_embed" style="width: 100%" data-feature="picture" data-periods="future_1,current,past_1,past_2">
+<a href="http://caniuse.com/#feat=picture">Can I Use picture?</a> Data on support for the picture feature across the major browsers from caniuse.com.
+</p>
+        </section>
+        <section>
+          <h2><span style="font-family: monospace">srcset</span> &amp; <span style="font-family: monospace">sizes</span> support</h2>
+          <p class="ciu_embed" data-feature="srcset" data-periods="future_1,current,past_1,past_2">
+  <a href="http://caniuse.com/#feat=srcset">Can I Use srcset?</a> Data on support for the srcset feature across the major browsers from caniuse.com.
+</p>
+        </section>
+        <section>
+          <h2><span style="font-family: monospace">srcset</span></h2>
+
+          <p>Can do two things (do not do at same time)</p>
+          <ul>
+            <li>Specify widths of images. Width corresponds to px
+<pre><code data-trim>
+srcset="img.png 100w, img-med.png 500w, img-lg.png 1000w"
+</code></pre>
+            </li>
+            <li>Specify at which pixel density images should be used
+<pre><code data-trim>
+srcset="img.png 2x, img-med.png 3x"
+</code></pre>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2><span style="font-family: monospace">sizes</span></h2>
+          <p>Defines the size images will be rendered at for certain media queries.</p>
+<pre><code data-trim>
+sizes="(min-width: 900px) 1000px, // image will be 1000px wide
+(max-width: 900px) and (min-width: 400px) 50vw, // at these images img will be 50%
+100vw" // default, image will be 100% wide</code></pre>
+<p class="fragment">The <strong>browser</strong> will decide which image from srcset is the appropriate one to use.</p>
+        </section>
+        <section>
+          <h2><span style="font-family: monospace">&lt;picture&gt;</span> element</h2>
+          <p>Gives explicit control over which image should be shown in certain media queries</p>
+<pre><code data-trim>
+<picture>
+  <source src="huge.jpg" media="(min-width:1200px)"> //1200px +
+  <source src="large.jpg" media="(min-width:992px)"> //992px +
+  <source src="medium.jpg" media="(min-width:768px)"> //768px +
+  <source src="small.jpg" media="(max-width: 767px)"> //767px -
+  <img src="fallback.jpg" alt="I'm the alt for every image" /> //fallback
+</picture>
+</code></pre>
+        </section>
+        <section>
+          <h2>By your powers combined...</h2>
+<pre><code data-trim>
+<picture>
+   <source media="(min-width: 36em)"
+      srcset="large.jpg  1024w,
+         medium.jpg 640w,
+         small.jpg  320w"
+      sizes="33.3vw" />
+   <source srcset="cropped-large.jpg 2x,
+         cropped-small.jpg 1x" />
+   <img src="small.jpg" alt="A rad wolf" />
+</picture></code></pre>
+<p>... I look kind of scary</p>
+        </section>
+      </section>
+      <section>
+        <h2>Quick overview of CSS</h2>
+        <p class="fragment"><strong>C</strong>ascading <strong>S</strong>tyle <strong>S</strong>heets</p>
+        <aside class="notes">
+          <p>Stylesheets are used to style your website.</p>
+          <p>The CSS tells the browser what to make things look like: whether something has black text or white, where to position it, etc.</p>
+        </aside>
+      </section>
+      <section>
+        <h2>Without CSS</h2>
+        <img src="images/css-off.jpg" />
+      </section>
+      <section>
+        <h2>With CSS</h2>
+        <img src="images/css-on.jpg" />
+      </section>
+      <section>
+        <h2>The Cascade</h2>
+        <p>Two things in CSS help determine which style(s) an element inherits.</p>
+        <ol>
+          <li>Specificity</li>
+          <li>Where the style rule lives in the stylesheet file</li>
+        </ol>
+        <div>
+          <br/>
+          <div style="width: 48%; float: left;">
+            <p><small>Specificity</small></p>
+<pre><code data-trim>
+p a { color: red; }
+a { color: blue; }
+</code></pre>
+<pre><code data-trim>
+<p><a href="#">This link will be red</a></p>
+</code></pre>
+          </div>
+        <div style="width: 48%; float: left;">
+          <p><small>Order</small></p>
+<pre><code data-trim>
+a { color: red; }
+a { color: blue; }
+</code></pre>
+<pre><code data-trim>
+<a href="#">This link will be blue</a>
+</code></pre>
+
+      </div>
+
+      <div style="clear:both;"></div>
+    </div>
+        <aside class="notes">
+          <p>Cascading = how stylesheets work. When more than one stylesheet rule can apply to a particular element in the html, the cascade determines which style is going to win.</p>
+          <p>Specificity is a measurement of the strength of a particular style rule. More on that in a moment.</p>
+          <p>Position matters. Given two rules that have an equal specificity, the one further down the css file will override the one that is higher.</p>
+        </aside>
+      </section>
+      <section>
+        <h2>Specificity</h2>
+        <a href="https://stuffandnonsense.co.uk/archives/images/specificitywars-05v2.jpg" target="_blank"><img src="images/specificitywars.jpg" style="max-width: 50%" /></a>
+        <p><small>Source: https://stuffandnonsense.co.uk/archives/images/specificitywars-05v2.jpg</small></p>
+        <aside class="notes">
+          <p>Element selectors are the weakest, followed by class selectors and then finally ID selectors.</p>
+          <p>Storm troopers to sith to dark lords of the sith</p>
+          <p>IDs can be very difficult to override - it's generally a rule in the community to not use IDs for styling, as that can lead to css that is difficult to update and maintain.</p>
+          <p>Selectors that are combined are more and more powerful, as you can see in the chart.</p>
+        </aside>
+      </section>
+      <section>
+        <section>
+          <h2>Trouble in (CSS) Paradise</h2>
+        </section>
+        <section>
+          <h3>!important</h3>
+          <div>
+<pre><code data-trim>
+#creature.equine.unicorn .body mane hair { color: blue; }
+#creature.equine.horse .body mane hair { color: brown; }
+#creature.equine.zebra .body mane hair { color: black; }
+</code></pre>
+          </div>
+          <div class="fragment">
+            Red hair for all? OK:
+            <pre><code>#creature hair { color: red !important; }</code></pre>
+          </div>
+          <div class="fragment">
+            Oh, but horses need green hair:
+            <pre><code>#creature.horse hair { color: green !important; }</code></pre>
+          </div>
+          <div class="fragment">
+            ... and so on.
+          </div>
+          <aside class="notes">
+            <p>First explain the selector. Hair in the mane of the body of the unicorn that is also an equine #creature.</p>
+            <p>It can be tempting to override a complex selector with !important. !important will override pretty much anything. The problem is a single !important may lead to others.</p>
+            <ol>
+              <li>There's a complex selector. Your boss says "Hey, animals all need red hair." So you just use !important. Nice and easy, done!</li>
+              <li>A week later the client says "We love the red hair, but horses need green hair." You have to raise the specificity in order to override that !important.</li>
+              <li>What if later on, horses of a certain breed need black hair? And so on, and so forth. A single !important breeds more down the line.</li>
+            </ol>
+          </aside>
+        </section>
+        <section>
+          <img src="images/Strip-CSS-respect-650-finalenglish1.jpg" />
+        </section>
+        <section>
+          <h3>Long, complex selectors</h3>
+
+          <div class="clearfix group">
+            <div style="width: 60%; float: left; ">
+              <p><strong>HTML</strong></p>
+              <pre style="width: 95%; margin:0;"><code data-trim>
+<creature id="horse" class="horse equine">
+  <mane></mane>
+</creature>
+
+<creature id="unicorn" class="unicorn equine">
+  <mane></mane>
+</creature>
+                </code></pre>
+            </div>
+            <div style="width: 40%; float: left;">
+              <p><strong>CSS</strong></p>
+              <pre style="width: 95%;"><code data-trim>
+// relatively simple selector
+.horse mane {
+  color: brown;
+}
+
+// complex selector
+creature#unicorn.equine.unicorn mane {
+  color: black;
+}
+                </code></pre>
+            </div>
+          </div>
+          <p style="clear:both;" class="fragment">The client says hey, all horses and unicorns need white manes.</p>
+          <pre class="fragment"><code data-trim data-noescape>
+.equine mane {
+  color: white <span class="fragment">!important;</span> <span class="fragment">:(</span>
+}
+            </code></pre>
+          <aside class="notes">
+            <p>For example, you're working this website, and the client says, "Hey, all equine animals need white manes."</p>
+            <p>Will the .equine mane { } selector work if we place it after the other rules? Well, it will override the horse rule, but not the other one.</p>
+            <p>So in this case you'd be forced to use important, rewrite the old class, or write another equally strong selector to override everything.</p>
+            <p>This can lead to difficult-to-maintain CSS that just gets more and more bloated as time goes on.</p>
+            <p>This can also make your website really fragile. All that nesting means if your HTML changes, your CSS may not work anymore. e.g. if we removed the #creature id, or if we renamed the mane element.</p>
+            <p>That selector is big and clearly unnecessary, but it's actually deceptively easy to write something very similar to it with less and sass. Because you can nest selectors, you don't always have a lot of awareness for how many levels deep you are at any given time.</p>
+          </aside>
+        </section>
+        <section>
+          <p data-height="265" data-theme-id="dark" data-slug-hash="f8e1585a0319d1925b8c425935336795" data-default-tab="html,result" data-user="WebAdvanced" data-embed-version="2" data-preview="true" data-editable="true" class="codepen">See the Pen <a href="http://codepen.io/WebAdvanced/pen/f8e1585a0319d1925b8c425935336795/">BEM - Holy Selectors Batman</a> by WebAdvanced (<a href="http://codepen.io/WebAdvanced">@WebAdvanced</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+          <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+          <aside class="notes">
+            <p>Let's pretend we want to remove the link from the logo. Now the layout breaks because that selector is fragile. :(</p>
+          </aside>
+        </section>
+        <section>
+          <h3>Inline styles</h3>
+            <pre><code data-trim>
+              <mane style="color: red;"></mane>
+            </code></pre>
+            <p>These can only be overwritten with !important</p>
+            <aside class="notes">
+              <p>Inline styles can be really tempting because they are so easy to add in. A single file gets changed and you're good to go!</p>
+              <p>The problem is that inline styles cannot easily be attributed to other items. So if you have 85 unicorns on your website, you would need to put inline styles on each one.</p>
+              <p>Inline styles can only be overwritten with !important, which is always a hassle but definitely doesn't play nice with responsive websites. It leads to !important hell in media queries.</p>
+            </aside>
+        </section>
+      </section>
+      <section>
+        <h2>So how do we fix it?</h2>
+      </section>
+      <section>
+        <h2>BEM to the rescue!</h2>
+        <p><small>(Also, just don't use inline CSS.)</small></p>
+        <p class="fragment"><strong>B</strong>lock</p>
+        <p class="fragment"><strong>E</strong>lement</p>
+        <p class="fragment"><strong>M</strong>odifier</p>
+        <aside class="notes">
+          <p>Block - a standalone entity that is meaningful on its own.<br/>
+            e.g. header, site navigation<br/>
+            non-html: unicorn</p>
+          <p>Element - Parts of a block that have no standalone meaning. They are intrinsically tied to the block in which they reside.<br/>
+            e.g. menu item<br/>
+            non-html: unicorn's horn, mane, coat</p>
+          <p>Modifier - Flags on blocks or elements. They change appearance or behavior.<br/>
+            e.g. disabled, checked, selected<br/>
+            non-html: old, pregnant, hungry</p>
+        </aside>
+      </section>
+      <section>
+        <h2>Why use BEM?</h2>
+        <ol>
+          <li>Modular</li>
+          <li>Reusable</li>
+          <li>Loosely tied to structure</li>
+        </ol>
+        <aside class="notes">
+          <ol>
+            <li>Modular
+              <ul>
+                <li>you won't get problems from cascading because your blocks generally do not rely on other elements on the page.</li>
+                <li>It would fit in very nicely with atomic design principles (Blocks = molecules and so on)</li>
+              </ul>
+            </li>
+            <li>Reusable
+              <ul>
+                <li>you should run into less instances of repeated code because you can easily reuse the same styles in multiple places.</li>
+                <li>you can more easily move css from one project to another! In theory!</li>
+              </ul>
+            </li>
+            <li>Structure
+              <ul>
+                <li>with BEM naming, you can understand some things about the html code without even seeing the html code (more on that in a second).</li>
+                <li>At the same time, you aren't generally using element selectors when using BEM. So that gives you the freedom to use different HTML elements as needed.</li>
+                <li>because of this, you are allowed greater confidence in making css changes. It's common to never delete CSS because you have no idea what items might be using that class and whether you are going to break some obscure part of your site. With BEM naming, you should be able to delete or rename CSS with higher levels of confidence.</li>
+              </ul>
+            </li>
+          </ol>
+        </aside>
+      </section>
+      <section>
+        <h2>Naming</h2>
+        <h3>Blocks</h3>
+        <ul>
+        <li>
+          Any combination of letters, digits, and dashes
+<pre><code data-trim>
+<div class="news-showcase"></div>
+<div class="news"></div>
+<div class="logo-2"></div>
+</code></pre>
+        </li>
+        <li>
+          No tag names, no IDs
+<pre><code data-trim>
+// wrong
+div.news-showcase { ... }
+#news.news-showcase { ... }
+
+// correct
+.news-showcase { ... }
+</code></pre>
+        </li>
+        <li>No dependency on any other blocks or elements on the page.
+<pre><code data-trim>
+// wrong
+.homepage .news-showcase { ... }
+
+// correct
+.news-showcase { ... }
+</code></pre>
+
+        </li>
+        </ul>
+      </section>
+      <section>
+        <h2>Naming</h2>
+        <h3>Elements</h3>
+        <ul>
+        <li>Block name + two underscores + element name
+<pre><code data-trim>
+.news-showcase__item { }
+</code></pre>
+        </li>
+        <li>CSS should not have tag names (e.g. "div") or IDs
+<pre><code data-trim>
+// wrong
+div.news-showcase__item { }
+</code></pre>
+        </li>
+        <li>Class should have no dependency on any other blocks or elements on the page.</li>
+        </ul>
+        <pre><code data-trim>
+// wrong
+.news-showcase .news-showcase__item { }
+
+// correct
+.news-showcase__item { }
+          </code></pre>
+      </section>
+      <section>
+        <h2>Naming</h2>
+        <h3>Modifiers</h3>
+        <ul>
+        <li>Block or element name followed by two dashes, then modifier name.
+<pre><code data-trim>
+.news-showcase--full-width { }
+.news-showcase__item--large { }
+</code></pre></li>
+        <li>Keep the original class on the element
+<pre><code data-trim>
+<div class="news-showcase__item news-showcase__item--large"></div>
+</code></pre></li>
+        <li>Sometimes modifiers may be a dependency for other elements
+<pre><code data-trim>
+.news-showcase__item--large .news-showcase__heading { } // headings inside large showcase item
+</code></pre></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Naming</h2>
+        <h3>Other</h3>
+        <ul style="width:100%;">
+        <li>Executing javascript?
+<pre><code data-trim>
+//HTML
+<a href="#" class="btn js--open-modal">Watch Video</a>
+</code></pre>
+<pre><code data-trim>
+//JS
+$('.js--open-modal').magnificPopup();
+</code></pre>
+<pre><code data-trim>
+//No CSS!
+</code></pre>
+</li>
+<li>IDs can also be used for this, but a class is nice for a reuseable component that has functionality (such as a rotator or modal popup).</li>
+        </ul>
+      </section>
+      <section>
+        <h2>BEM with fake code</h2>
+        <div>
+          <div style="width: 48%; float:left;">
+            <p data-height="300" data-theme-id="dark" data-slug-hash="f00485bef2de29540e00d9ea6b666a9a" data-default-tab="html" data-user="WebAdvanced" data-embed-version="2" data-preview="true" data-editable="true" class="codepen">See the Pen <a href="http://codepen.io/WebAdvanced/pen/f00485bef2de29540e00d9ea6b666a9a/">BEM Presentation - HTML</a> by WebAdvanced (<a href="http://codepen.io/WebAdvanced">@WebAdvanced</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+            <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+          </div>
+          <div style="width: 48%; float:left;">
+            <p data-height="300" data-theme-id="dark" data-slug-hash="da8e57129847ba5460fdc004f69021bc" data-default-tab="css" data-user="WebAdvanced" data-embed-version="2" data-preview="true" data-editable="true" class="codepen">See the Pen <a href="http://codepen.io/WebAdvanced/pen/da8e57129847ba5460fdc004f69021bc/">BEM Presentation - CSS</a> by WebAdvanced (<a href="http://codepen.io/WebAdvanced">@WebAdvanced</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+            <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+          </div>
+          <div style="clear:both;"></div>
+        </div>
+        <aside class="notes">
+          <p>In the HTML you can't at first really tell the difference without classes.</p>
+          <p>BLOCK: creature class="equine"</p>
+          <p>ELEMENT: mane class="equine__mane" (this would differentiate it from a lion's mane)</p>
+          <p>MODIFIER: creature class="equine equine--unicorn"</p>
+        </aside>
+      </section>
+      <section>
+        <h2>SASS Tips</h2>
+        <p>You can group BEM blocks with their elements and modifiers into a tidy package using SASS or LESS.</p>
+        <div>
+          <div style="float:left; width: 48%">
+<pre><code data-trim>
+// The SCSS
+.news-showcase {
+  ...
+  &__item {
+    ...
+    &--large {
+      ...
+      .news-showcase__heading {
+        ...
+      }
+    }
+  }
+  &__heading {
+    ...
+  }
+}
+</code></pre>
+</div>
+<div style="float:left; width: 48%">
+<pre><code data-trim>
+// The Generated CSS
+.news-showcase { ... }
+.news-showcase__item { ... }
+.news-showcase__item--large { ... }
+.news-showcase__item--large .news-showcase__heading { ... }
+.news-showcase__heading { ... }
+</code></pre>
+</div>
+<div style="clear:both;"></div>
+</div>
+      </section>
+      <section>
+        <h2>General Rules</h2>
+        <ul>
+          <li>Stick to the naming convention</li>
+          <li>When using SASS/LESS, only nest classes when necessary</li>
+          <li>Avoid IDs/!important in your CSS &amp; inline styles in your HTML</li>
+          <li>Keep your CSS markup-agnostic. CSS shouldn't care if it is on a &lt;div&gt; or a &lt;p&gt;</li>
+        </ul>
+        <br/><br/>
+        <p style="margin-bottom: 0;"><small>Let's try to avoid this!</small></p>
+        <img src="images/css-life.png" />
+      </section>
+      <section>
+        <h2>Questions?</h2>
+        <figure>
+          <img src="images/adjusting-css.gif" />
+          <figcaption><small>Fixing browser bugs</small></figcaption>
+        </figure>
+      </section>
+    </div>
+  </div>
+  <!--
+
+  REFERENCES:
+  http://getbem.com/introduction/
+  -->
+  <script src="//cdn.jsdelivr.net/caniuse-embed/1.1.0/caniuse-embed.min.js"></script>
+  <script src="js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      dependencies: [
+        {
+          src: 'plugin/live-coding.js', async: true, condition: function() { return !!document.body.classList; },
+          src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); }
+
+        }
+      ],
+      history: true
+    });
+  </script>
+</body>
+</html>
