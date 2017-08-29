@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <title>Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css">
+  img { max-width: 100%; width: 100%; }
+  .key { list-style: none outside; margin: 0; padding: 0; display: flex; flex-wrap: wrap;}
+  .key strong { display: block; }
+  .key img { display: block; }
+  picture { width: 100%; }
+
+  </style>
+</head>
+<body>
+<h1>Key</h1>
+<p>No picturefill is included.</p>
+<ul class="key">
+  <li><strong>Extra Large</strong> <img src="http://www.placeunicorn.com/100x100/4" alt="" /></li>
+  <li><strong>Large</strong> <img src="http://www.placeunicorn.com/100x100/10" alt="" /></li>
+  <li><strong>Medium</strong> <img src="http://www.placeunicorn.com/100x100/11" alt="" /></li>
+  <li><strong>Small (2x)</strong> <img src="http://www.placeunicorn.com/100x100/13" alt="" /></li>
+  <li><strong>Small (other)</strong> <img src="http://www.placeunicorn.com/100x100/12" alt="" /></li>
+  <li><strong>Fallback</strong> <img src="http://www.placeunicorn.com/100x100/14" alt="" /></li>
+</ul>
+
+<h1>Responsive</h1>
+<picture>
+  <source srcset="http://www.placeunicorn.com/1600x800/4" media="(min-width:1200px)">
+  <source srcset="http://www.placeunicorn.com/1200x600/10" media="(min-width:992px)">
+  <source srcset="http://www.placeunicorn.com/992x1200/11" media="(min-width:768px)">
+  <source srcset="http://www.placeunicorn.com/1536x1800/13 2x, http://www.placeunicorn.com/768x900/12" media="(max-width:767px)">
+  <img src="http://www.placeunicorn.com/300x300/14" alt="Unicorn" />
+</picture>
+</body>
+</html>
