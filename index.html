@@ -5,9 +5,17 @@
   <link rel="stylesheet" href="css/reveal.css" />
   <link rel="stylesheet" href="css/theme/night.css" />
   <link rel="stylesheet" href="css/rainbow.css" />
+  <link rel="stylesheet" href="css/print/pdf.css" media="print" />
   <style>
   .reveal .speaker-notes { max-height: 50%; }
   </style>
+  <script>
+  	var link = document.createElement( 'link' );
+  	link.rel = 'stylesheet';
+  	link.type = 'text/css';
+  	link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+  	document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
 </head>
 <body>
   <div class="reveal">
@@ -285,7 +293,7 @@ sizes="(min-width: 900px) 1000px, // image will be 1000px wide
           <aside class="notes">
             <ul>
               <li>We have to make sure we budget for responsive images</li>
-              <li>For clients who request responsive images or a retina-ready website, we need to be sure they know what that means for their future maintenance and how their decisions will affect the budget</li> 
+              <li>For clients who request responsive images or a retina-ready website, we need to be sure they know what that means for their future maintenance and how their decisions will affect the budget</li>
             </ul>
           </aside>
         </section>
@@ -326,5 +334,6 @@ sizes="(min-width: 900px) 1000px, // image will be 1000px wide
   history: true
 });
 </script>
+
 </body>
 </html>
